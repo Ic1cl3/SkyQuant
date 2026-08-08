@@ -11,7 +11,7 @@ class strategyB(predictor):
             start = self.market.data[stock][self.market.timestep - 9]
             end = self.market.data[stock][self.market.timestep]
             high = 0.0
-            low = 999999.0
+            low = self.market.data[stock][self.market.timestep]
             for i in range(9):
                 point = self.market.data[stock][self.market.timestep - i]
                 if point > high:
