@@ -11,13 +11,13 @@ class market:
         self.timestep = -1
         self.data = {}
         stocks = []
-        with open("stockList.txt", "r") as f:
+        with open("config/stockList.txt", "r") as f:
             for line in f:
                 stock = line.strip()
                 stocks.append(stock)
         start = ""
         end = ""
-        with open("dates.txt", "r") as f:
+        with open("config/dates.txt", "r") as f:
             start = f.readline().strip()
             end = f.readline().strip()
         for stock in stocks:
