@@ -43,3 +43,16 @@ class trader:
                 self.sellAll(stock)
             return True
         self.sell(stock, self.holdings[stock])
+
+    def short(self, stock : str, quantity : int) -> bool:
+        price = self.market.prices[stock]
+        total_cost = quantity * price
+        if self.balance >= total_cost:
+            self.balance -= total_cost
+            if stock in self.holdings:
+                self.holdings[stock] -= quantity
+            else:
+                self.holdings[stock] = -quantity
+            return True
+        else:
+            return False
