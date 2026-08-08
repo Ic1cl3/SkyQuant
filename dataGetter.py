@@ -1,8 +1,8 @@
 import yfinance as yf
 
 
-def getData(stock : str, start_date : str, end_date : str) -> list[float]:
-    data = yf.download(stock, start=start_date, end=end_date, interval="1m")
+def getData(stock : str, start_date : str, end_date : str, _interval = "1m") -> list[float]:
+    data = yf.download(stock, start=start_date, end=end_date, interval=_interval)
     csvData = data.to_csv()
     lines = csvData.split("\n")
     output : list[float] = []

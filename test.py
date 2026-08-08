@@ -1,20 +1,18 @@
 import trader as td
+from strategies import strategyA as sA
 import market as mk
+import dataGetter as dg
 
 market = mk.market()
-trader = td.trader(10000, market)
+trader = sA.strategyA(10000, market)
 
-avgPriceMcd = 0
-for i in range(90):
-    avgPriceMcd += market.data["MCD"][i]
-avgPriceMcd /= 90
-
-
-for i in range(90):
-    if market.prices["MCD"] < avgPriceMcd:
-        trader.buy("MCD", 1)
-    elif market.prices["MCD"] > avgPriceMcd:
-        trader.sell("MCD", 1)
+for i in range(20):
     market.update()
+
+for i in range(160):
+    trader.call()
+    market.update()
+    print(market.timestep, trader.balance)
+
 trader.sellAll()
-print(trader.balance)
+print("Final balance:", trader.balance)
