@@ -10,7 +10,7 @@ trader = sB.strategyB(10000, market)
 for i in range(20):
     market.update()
 
-for i in range(160):
+for i in range(1000):
     trader.call()
     market.update()
     print(market.timestep, trader.balance)

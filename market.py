@@ -15,15 +15,19 @@ class market:
             for line in f:
                 stock = line.strip()
                 stocks.append(stock)
-        start = ""
-        end = ""
+        starts = []
+        ends = []
         timestep = ""
         with open("config/dates.txt", "r") as f:
-            start = f.readline().strip()
-            end = f.readline().strip()
+            starts = f.readline().strip().split(",")
+            ends = f.readline().strip().split(",")
             timestep = f.readline().strip()
         for stock in stocks:
-            self.data[stock] = dg.getData(stock, start, end, timestep)
+            stockData = []
+            for pointIndex in range(len(starts)):
+                for point in dg.getData(stock, starts[pointIndex], ends[pointIndex], timestep):
+                    stockData.append(point)
+            self.data[stock] = stockData
         self.update()
 
     def update(self) -> None:
