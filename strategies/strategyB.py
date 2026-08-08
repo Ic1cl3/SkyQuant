@@ -6,14 +6,29 @@ class strategyB(predictor):
     def call(self) -> None:
         for stock in self.market.prices:
             prediction = 0
-            for i in range(min(9, self.market.timestep)):
-                if i < 1:
-                    continue
-                if self.market.data[stock][self.market.timestep-i] > self.market.data[stock][self.market.timestep-i-1]:
-                    prediction += 1
+            # Retrieve some recent data for each stock.
+            averagePrice = 0
+            start = self.market.data[stock][self.market.timestep - 9]
+            end = self.market.data[stock][self.market.timestep]
+            high = 0.0
+            low = 999999.0
+            for i in range(9):
+                point = self.market.data[stock][self.market.timestep - i]
+                if point > high:
+                    high = point
+                if point < low:
+                    low = point
+                averagePrice += point
+            averagePrice /= 9
+            pRange = high - low
+            trend = ((end/pRange) - (start/pRange))
+            prediction = (trend * 1.5)**3
             print(f"{stock}: {prediction}")
-            if prediction < 8: continue
-            if prediction > 0:
-                self.buy(stock, 30)
-            else:
-                self.sell(stock, 30)
+            if abs(prediction) < 0.8: continue
+            budget = round(prediction * 300) - self.market.prices[stock]
+            while budget > 0:
+                if prediction > 0:
+                    self.buy(stock, 1)
+                else:
+                    self.sell(stock, 1)
+                budget -= self.market.prices[stock]
