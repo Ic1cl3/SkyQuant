@@ -1,10 +1,11 @@
 import trader as td
 from strategies import strategyA as sA
+from strategies import strategyB as sB
 import market as mk
 import dataGetter as dg
 
 market = mk.market()
-trader = sA.strategyA(10000, market)
+trader = sB.strategyB(10000, market)
 
 for i in range(20):
     market.update()
