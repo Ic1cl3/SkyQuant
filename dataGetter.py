@@ -11,5 +11,6 @@ def getData(stock : str, start_date : str, end_date : str) -> list[float]:
         if i < 6 or i % 2 == 1:
             continue
         # We take item 2 of the comma seperated line for each datapoint line.
-        output.append(float(lines[i].split(",")[1]))
+        if len(lines[i].split(",")) > 1:
+            output.append(float(lines[i].split(",")[1]))
     return output
