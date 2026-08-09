@@ -129,6 +129,10 @@ def fetch() -> None:
 # Run stuff.
 def graphPortfolio(portfolio : list[float]) -> None:
     global graph
+    global stats
+    global skyLabel
+    global highL
+    global lowL
     horStep = 540/(len(portfolio) - 1)
     graph.delete("trendline")
     high = 11000
@@ -150,6 +154,15 @@ def graphPortfolio(portfolio : list[float]) -> None:
         if portfolio[i] > position[1]:
             color = "green"
         graph.create_line(position[0]*horStep, 400*(1-((position[1]-low)/valueRange)), i*horStep, 400*(1-((portfolio[i]-low)/valueRange)), fill=color, width=5, tags="trendline", capstyle="round")
+        stats["text"] = f"Value: ${round(portfolio[i],2)}; Profit: {round((round(100*(portfolio[i]/10000), 2))-100, 2)}%"
+        if portfolio[i] > 10000:
+            skyLabel["text"] = "You have broken through the clouds."
+            skyLabel["foreground"] = "green"
+        else:
+            skyLabel["text"] = "Find more familiar skies."
+            skyLabel["foreground"] = "red"
+        lowL["text"] = f"${round(low, 2)}"
+        highL["text"] = f"${round(high, 2)}"
         position = (i, portfolio[i])
 
 def hist() -> None:
@@ -191,8 +204,8 @@ root = Tk()
 root.geometry=("900x500")
 root.title("SkyQuant")
 root.iconbitmap(str(scriptdir) + "/icon.ico")
-root.maxsize(900, 550)
-root.minsize(900, 550)
+root.maxsize(910, 550)
+root.minsize(910, 550)
 root["bg"] = "#1F2539"
 # Content creation.
 ## Title
@@ -263,5 +276,24 @@ fetch()
 graph = Canvas(root, width=540, height=400, background="#343e60", highlightthickness=0)
 graph.place(x=300, y=80, anchor="nw")
 graph.create_line(0, 200, 540, 200, width=5, fill="#1F2539")
+highL = sLabel(root, text="$11000.00")
+lowL = sLabel(root, text="$9000.00")
+highL.style()
+lowL.style()
+highL["font"] = ("Courier", 8, "normal")
+lowL["font"] = ("Courier", 8, "normal")
+highL.place(x=842, y=80, anchor="nw")
+lowL.place(x=842, y=480, anchor="sw")
+midL = sLabel(root, text="Sky High\n$10000.00")
+midL.style()
+midL["font"] = ("Courier", 8, "normal")
+midL.place(x=842,y=275,anchor="w")
+skyLabel = sLabel(root, text="Find more familiar skies.")
+skyLabel.style()
+skyLabel["foreground"] = "red"
+skyLabel.place(x=310, y=490, anchor="nw")
+stats = sLabel(root, text = "Value: $10000.00; Profit: 0.00%")
+stats.style()
+stats.place(x=310,y=70,anchor="sw")
 # Build.
 root.mainloop()
