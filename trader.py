@@ -56,3 +56,9 @@ class trader:
             return True
         else:
             return False
+
+    def evaluate(self) -> float:
+        portfolioValue = self.balance
+        for stock in self.holdings:
+            portfolioValue += self.holdings[stock] * self.market.prices[stock]
+        return portfolioValue
