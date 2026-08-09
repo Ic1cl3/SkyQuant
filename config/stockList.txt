@@ -1,5 +1,4 @@
-PEP
-HSY
 MCD
-CMG
 SHAK
+CMG
+PEP

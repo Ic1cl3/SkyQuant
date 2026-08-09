@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter
 from tkinter import ttk
 from pathlib import Path
+import configEdit as cE
 
 
 # Stylized lables.
@@ -89,6 +90,42 @@ def updateStratDesc() -> None:
     stratDesc.config(text=descriptions[strategy])
     root.update()
 
+# Compiling config data.
+def configure() -> None:
+    global startDates
+    global endDates
+    global timeScale
+    global stocks
+    stockLines = ""
+    for stock in stocks.get().split(","):
+        stockLines += stock + "\n"
+    stockLines = stockLines[:len(stockLines) - 1]
+    cE.updateStockList(stockLines)
+    timelines = ""
+    timelines += startDates.get() + "\n"
+    timelines += endDates.get() + "\n"
+    timelines += timeScale.get()
+    cE.updateDates(timelines)
+def fetch() -> None:
+    global startDates
+    global endDates
+    global timeScale
+    global stocks
+    stockCommas = ""
+    for stock in cE.getStockList().split("\n"):
+        stockCommas += stock + ","
+    stockCommas = stockCommas[:len(stockCommas) - 1]
+    stocks.insert(string=stockCommas, index=0)
+    timeData = cE.getDates().split("\n")
+    startDates.insert(string=timeData[0], index = 0)
+    endDates.insert(string=timeData[1], index=0)
+    timeScale.insert(string=timeData[2], index=0)
+
+# Run stuff.
+def hist():
+    configure()
+def paper():
+    configure()
 
 scriptdir = Path(__file__).parent
 # Root window generation.
@@ -152,17 +189,18 @@ timeScale.place(x=20,y=425)
 stocks = sEntry(root)
 stocks.style()
 stocks.place(x=20,y=445)
-runSim = sButton(root, text="Simulate Historical Data", padx=0, pady=0)
+runSim = sButton(root, text="Simulate Historical Data", padx=0, pady=0, command=hist)
 runSim.style()
 runSim["font"] = ("Courier", 12, "normal")
 runSim["relief"] = "raised"
 runSim
 runSim.place(x=18, y=470)
-trade = sButton(root, text="Trade Paper", padx=0, pady=0)
+trade = sButton(root, text="Trade Paper", padx=0, pady=0, command=paper)
 trade.style()
 trade["font"] = ("Courier", 12, "normal")
 trade["relief"] = "raised"
 trade
 trade.place(x=18, y=500)
+fetch()
 # Build.
 root.mainloop()
