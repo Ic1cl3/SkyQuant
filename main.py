@@ -165,7 +165,7 @@ def hist() -> None:
     if strategy == stratB:
         trader = sB.strategyB(10000, market)
     if strategy == stratC or strategy == stratD:
-        trader = predictor.predictor()
+        trader = predictor.predictor(10000, market)
     history = [10000 for i in range(50)]
     for i in range(20):
         market.update()
