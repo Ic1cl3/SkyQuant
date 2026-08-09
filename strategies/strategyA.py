@@ -66,4 +66,3 @@ class strategyA(predictor):
             else:
                 for i in range(round(prediction*3)):
                     self.sell(stock1, 1)
-            print(prediction)
