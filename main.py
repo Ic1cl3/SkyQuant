@@ -198,7 +198,7 @@ def hist() -> None:
 def paper() -> None:
     configure()
 
-scriptdir = Path(__file__).parent
+scriptdir = Path(__file__).resolve().parent
 # Root window generation.
 root = Tk()
 root.geometry=("900x500")

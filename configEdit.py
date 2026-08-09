@@ -1,6 +1,6 @@
 from pathlib import Path
 
-scriptPath = str(Path(__file__).parent)
+scriptPath = str(Path(__file__).resolve().parent)
 
 def getStockList() -> str:
     with open(scriptPath + "/config/stockList.txt", "r") as f:

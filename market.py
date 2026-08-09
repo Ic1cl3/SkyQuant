@@ -1,7 +1,7 @@
 import dataGetter as dg
 from pathlib import Path
 
-scriptPath = Path(__file__).parent
+scriptPath = Path(__file__).resolve().parent
 
 class market:
 
