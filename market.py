@@ -1,4 +1,7 @@
 import dataGetter as dg
+from pathlib import Path
+
+scriptPath = Path(__file__).parent
 
 class market:
 
@@ -11,14 +14,14 @@ class market:
         self.timestep = -1
         self.data = {}
         stocks = []
-        with open("config/stockList.txt", "r") as f:
+        with open(str(scriptPath) + "/config/stockList.txt", "r") as f:
             for line in f:
                 stock = line.strip()
                 stocks.append(stock)
         starts = []
         ends = []
         timestep = ""
-        with open("config/dates.txt", "r") as f:
+        with open(str(scriptPath) + "/config/dates.txt", "r") as f:
             starts = f.readline().strip().split(",")
             ends = f.readline().strip().split(",")
             timestep = f.readline().strip()

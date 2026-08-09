@@ -23,7 +23,6 @@ class strategyB(predictor):
             pRange = high - low
             trend = ((end/pRange) - (start/pRange))
             prediction = (trend * 1.5)**3
-            print(f"{stock}: {prediction}")
             if abs(prediction) < 0.8: continue
             budget = round(prediction * 300) - self.market.prices[stock]
             while budget > 0:

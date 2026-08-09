@@ -3,6 +3,11 @@ import tkinter
 from tkinter import ttk
 from pathlib import Path
 import configEdit as cE
+import time
+import market as mk
+import predictor
+from strategies import strategyA as sA
+from strategies import strategyB as sB
 
 
 # Stylized lables.
@@ -122,9 +127,62 @@ def fetch() -> None:
     timeScale.insert(string=timeData[2], index=0)
 
 # Run stuff.
-def hist():
+def graphPortfolio(portfolio : list[float]) -> None:
+    global graph
+    horStep = 540/(len(portfolio) - 1)
+    graph.delete("trendline")
+    high = 11000
+    low = 9000
+    for value in portfolio:
+        if value >= high:
+            high = value
+        if value <= low:
+            low = value
+    if abs(10000-low) > abs(10000-high):
+        high = 10000+abs(10000-low)
+    elif abs(10000-high) > abs(10000-low):
+        low = 10000-abs(10000-high)
+    valueRange = high - low
+    position = (0, portfolio[0])
+    for i in range(len(portfolio)):
+        if i == 0: continue
+        color = "red"
+        if portfolio[i] > position[1]:
+            color = "green"
+        graph.create_line(position[0]*horStep, 400*(1-((position[1]-low)/valueRange)), i*horStep, 400*(1-((portfolio[i]-low)/valueRange)), fill=color, width=5, tags="trendline", capstyle="round")
+        position = (i, portfolio[i])
+
+def hist() -> None:
+    global graph
+    global strategy
+    global root
     configure()
-def paper():
+    graph.delete("trendline")
+    market = mk.market()
+    trader = None
+    if strategy == stratA:
+        trader = sA.strategyA(10000, market)
+    if strategy == stratB:
+        trader = sB.strategyB(10000, market)
+    if strategy == stratC or strategy == stratD:
+        trader = predictor.predictor()
+    history = [10000 for i in range(50)]
+    for i in range(20):
+        market.update()
+    length = -1
+    for key in market.data:
+        if len(market.data[key]) < length or length == -1:
+            length = len(market.data[key])
+    for i in range(length - 25):
+        trader.call()
+        market.update()
+        history.pop(0)
+        history.append(trader.evaluate())
+        graphPortfolio(history)
+        root.update()
+        time.sleep(0)
+
+def paper() -> None:
     configure()
 
 scriptdir = Path(__file__).parent
@@ -199,8 +257,11 @@ trade = sButton(root, text="Trade Paper", padx=0, pady=0, command=paper)
 trade.style()
 trade["font"] = ("Courier", 12, "normal")
 trade["relief"] = "raised"
-trade
 trade.place(x=18, y=500)
 fetch()
+# Graph.
+graph = Canvas(root, width=540, height=400, background="#343e60", highlightthickness=0)
+graph.place(x=300, y=80, anchor="nw")
+graph.create_line(0, 200, 540, 200, width=5, fill="#1F2539")
 # Build.
 root.mainloop()
