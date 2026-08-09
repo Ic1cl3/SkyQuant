@@ -23,6 +23,16 @@ class sButton(Button):
         self["font"] = ("Courier", 12, "normal")
         self["relief"] = "flat"
 
+# Stylized entries.
+class sEntry(Entry):
+
+    def style(self):
+        self["bg"] = "#343e60"
+        self["fg"] = "white"
+        self["font"] = ("Courier", 12, "normal")
+        self["width"] = 20
+        self["insertbackground"] = "white"
+
 
 # Enum
 stratA = 0
@@ -86,8 +96,8 @@ root = Tk()
 root.geometry=("900x500")
 root.title("SkyQuant")
 root.iconbitmap(str(scriptdir) + "/icon.ico")
-root.maxsize(900, 500)
-root.minsize(900, 500)
+root.maxsize(900, 550)
+root.minsize(900, 550)
 root["bg"] = "#1F2539"
 # Content creation.
 ## Title
@@ -125,5 +135,34 @@ stratDesc = sLabel(root, text="Uses ultra-short term data for ultra-high frequen
 stratDesc.style()
 stratDesc["font"] = ("Courier", 14, "normal")
 stratDesc.place(x=20, y=185, anchor="nw")
+## Sim edit.
+simEditLabel = sLabel(root, text="Edit Config:")
+simEditLabel.style()
+simEditLabel["font"] = ("Courier", 12, "normal")
+simEditLabel.place(x=20, y=360)
+startDates = sEntry(root)
+startDates.style()
+startDates.place(x=20, y=385)
+endDates = sEntry(root)
+endDates.style()
+endDates.place(x=20,y=405)
+timeScale = sEntry(root)
+timeScale.style()
+timeScale.place(x=20,y=425)
+stocks = sEntry(root)
+stocks.style()
+stocks.place(x=20,y=445)
+runSim = sButton(root, text="Simulate Historical Data", padx=0, pady=0)
+runSim.style()
+runSim["font"] = ("Courier", 12, "normal")
+runSim["relief"] = "raised"
+runSim
+runSim.place(x=18, y=470)
+trade = sButton(root, text="Trade Paper", padx=0, pady=0)
+trade.style()
+trade["font"] = ("Courier", 12, "normal")
+trade["relief"] = "raised"
+trade
+trade.place(x=18, y=500)
 # Build.
 root.mainloop()
